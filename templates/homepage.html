@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+
+{% block content %}
+<p></p>
+<div class="row justify-content-around">
+    <div class="col-lg-6">
+        <a href="{{ url_for('homepage', list_type='now_playing') }}" class="btn btn-outline-info">Teraz odtwarzane</a>
+        <a href="{{ url_for('homepage', list_type='upcoming') }}" class="btn btn-outline-info">Nadchodzące</a>
+        <a href="{{ url_for('homepage', list_type='top_rated') }}" class="btn btn-outline-info">Wysoko Oceniane</a>
+        <a href="{{ url_for('homepage', list_type='popular') }}" class="btn btn-outline-info">Popularne</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <h1 class="mt-5">Filmy typu {{ current_list }}</h1>
+        <p class="lead">generowana przez API ze strony "the movie database"</p>
+    </div>
+
+    {% for movie in movies %}
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+            <img src='{{ tmdb_image_url(movie.poster_path, "w780") }}'>
+            <div class="card-body">
+                <h4 class="card-title">{{ movie.title }}</h4>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{{ url_for('movie_details', movie_id=movie.id) }}">Pokaż więcej</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
