@@ -11,9 +11,9 @@ app.secret_key = "asdhjrzkjwe"
 
 @app.route("/favorites/add", methods=["POST"])
 def add_to_favorites():
-    data = request.form
-    movie_id = data.get("movie_id")
-    movie_title = data.get("movie_title")
+    #data = request.form
+    movie_id = request.form.get("movie_id")
+    movie_title = request.form.get("movie_title")
     if movie_id and movie_title:
         FAVORITES.add(movie_id)
         flash(f"added {movie_title} to favorites")
@@ -34,10 +34,12 @@ def show_favorites():
 
 @app.route("/")
 def homepage():
+    #full name shown to user
     options = ["Latest", "Now playing", "Popular", "Top rated", "Upcoming"]
     value = request.args.get("value", "Popular")
     selected_list = request.args.get("list_type", "popular")
 
+    #reduced name passed to API
     safelock = ["latest", "now_playing", "popular", "top_rated", "upcoming"]
     if any(item == selected_list for item in safelock):
         pass
@@ -71,9 +73,6 @@ def search():
 def movie_details(movie_id):
     details = tmdb_client.get_single_movie(movie_id)
     cast = tmdb_client.get_single_movie_cast(movie_id)
-    # movie_images = tmdb_client.get_movie_images(movie_id)
-    # selected_backdrop = random.choice(movie_images['backdrops'])
-    # return render_template("movie_details.html", movie=details, cast=cast, selected_backdrop=selected_backdrop)
     return render_template("movie_details.html", movie=details, cast=cast)
 
 
@@ -88,7 +87,6 @@ def today():
 def utility_processor():
     def tmdb_image_url(path, size):
         return tmdb_client.get_poster_url(path, size)
-
     return {"tmdb_image_url": tmdb_image_url}
 
 
