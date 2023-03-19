@@ -15,6 +15,7 @@
     <body>
         <!-- Responsive navbar-->
         <!-- Page content-->
+        <p class="lead text-center">All content data is being taken from "the movie database v3"</p>
         <div class="container">
             <div class="row">
                 {% with messages = get_flashed_messages() %}
@@ -30,6 +31,38 @@
                     {% endif %}
                 {% endwith %}
             </div>
+
+            <!--upper menu generator-->
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <a href="{{ url_for('lucky') }}" class="btn btn-primary">Lucky guess</a>
+                    <a href="{{ url_for('show_favorites') }}" class="btn btn-outline-success">Favorites</a>
+                    <a href="{{ url_for('today') }}" class="btn btn-outline-info">TV Series</a>
+                </div>
+
+                <div class="col-lg-4">
+                    <form class="form-inline" method="GET" action="/search">
+                        <div class="form-group mx-sm-3 mb-2">
+                            <label for="search" class="sr-only">Search</label>
+                            <input type="text" class="form-control" id="search" value="{% if search_query %}{{ search_query }}{% endif %}" placeholder="Title here" name="Sform">
+                        </div>
+                            <button type="submit" class="btn btn-primary mb-2">Search</button>
+                    </form>
+                </div>
+
+               <div class="col-lg-8">
+                    {% for option in options %}
+                        {% if option == current_list %}
+                        <a href="{{ url_for('homepage', list_type=option.lower()|replace(" ", "_"), value=option ) }}" class="btn btn-secondary active" role="button" aria-pressed="true">{{ option }}</a>
+                        {% else %}
+                        <a href="{{ url_for('homepage', list_type=option.lower()|replace(" ", "_"), value=option ) }}" class="btn btn-secondary" role="button">{{ option }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <p></p>
+            <!---->
             {% block content %}
             {% endblock %}
         </div>
